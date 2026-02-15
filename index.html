@@ -968,14 +968,32 @@ function loadSession(sessionId) {
 }
 
 // Delete a session
+// Delete a session
 function deleteSession(sessionId, event) {
     event.stopPropagation();
     
     if (confirm('Delete this chat?')) {
+        // Delete the session
         delete chatSessions.sessions[sessionId];
         
-        if (chatSessions.current === sessionId) {
-            createNewSession();
+        // Check if there are any sessions left
+        const remainingSessions = Object.keys(chatSessions.sessions).length;
+        
+        if (remainingSessions === 0) {
+            // No sessions left - create a fresh start
+            chatSessions = {
+                current: null,
+                sessions: {}
+            };
+            createNewSession(); // This will create ONE new session
+        } else {
+            // Sessions still exist
+            if (chatSessions.current === sessionId) {
+                // If deleted current session, load the most recent one
+                const sortedSessions = Object.values(chatSessions.sessions)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+                loadSession(sortedSessions[0].id);
+            }
         }
         
         saveSessions();
@@ -1000,40 +1018,49 @@ function saveSessions() {
 }
 
 // Render history sidebar
+// Render history sidebar
 function renderHistorySidebar() {
     const historyList = document.getElementById('historyList');
     if (!historyList) return;
-    
+
     let html = '';
-    
-    // Sort sessions by date (newest first)
-    const sortedSessions = Object.values(chatSessions.sessions)
+
+    // Filter out empty sessions (no messages and title is "New Chat")
+    const validSessions = Object.values(chatSessions.sessions)
+        .filter(session => {
+            // Keep session if it has messages OR it's the current active session
+            return (session.messages && session.messages.length > 0) || session.id === chatSessions.current;
+        })
         .sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    sortedSessions.forEach(session => {
-        const isActive = session.id === chatSessions.current;
-        const date = new Date(session.date).toLocaleDateString();
-        
-        html += `
-            <div class="history-item ${isActive ? 'active' : ''}" onclick="loadSession('${session.id}')">
-                <div class="history-item-title">${session.title}</div>
-                <div class="history-item-preview">${session.preview || 'No messages'}</div>
-                <div class="history-item-date">${date}</div>
-                <div class="history-item-actions">
-                    <button onclick="renameSession('${session.id}', event)">✏️</button>
-                    <button onclick="deleteSession('${session.id}', event)">🗑️</button>
-                </div>
-            </div>
-        `;
-    });
-    
-    if (sortedSessions.length === 0) {
+
+    if (validSessions.length === 0) {
         html = '<div style="text-align: center; color: #555; padding: 20px;">No chat history</div>';
+    } else {
+        validSessions.forEach(session => {
+            const isActive = session.id === chatSessions.current;
+            const date = new Date(session.date).toLocaleDateString();
+            const hasMessages = session.messages && session.messages.length > 0;
+            
+            // Only show delete button if session has messages
+            const deleteButton = hasMessages ? 
+                `<button onclick="deleteSession('${session.id}', event)">🗑️</button>` : '';
+
+            html += `
+                <div class="history-item ${isActive ? 'active' : ''}" onclick="loadSession('${session.id}')">
+                    <div class="history-item-title">${session.title}</div>
+                    <div class="history-item-preview">${session.preview || 'No messages'}</div>
+                    <div class="history-item-date">${date}</div>
+                    <div class="history-item-actions">
+                        <button onclick="renameSession('${session.id}', event)">✏️</button>
+                        ${deleteButton}
+                    </div>
+                </div>
+            `;
+        });
     }
-    
+
     historyList.innerHTML = html;
 }
-
 // Export history
 function exportHistory() {
     const dataStr = JSON.stringify(chatSessions, null, 2);
@@ -1161,4 +1188,5 @@ function importHistory() {
 
 
 </html>
+
 
