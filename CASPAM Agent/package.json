@@ -1,0 +1,6 @@
+{
+    "name": "caspam-ai",
+    "scripts": {
+        "vercel-build": "echo Hello"
+    }
+}
