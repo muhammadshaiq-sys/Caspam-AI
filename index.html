@@ -642,6 +642,60 @@
     background: rgba(0, 0, 0, 0.2);
     min-height: 500px; /* Ensure minimum height */
 }
+        /* FORCE FIX - ADD THIS AT THE END OF YOUR STYLE TAG */
+.messages {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    padding: 30px !important;
+    height: calc(100vh - 140px) !important;
+    overflow-y: auto !important;
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.msg {
+    display: block !important;
+    max-width: 85% !important;
+    padding: 16px 22px !important;
+    border-radius: 18px !important;
+    line-height: 1.6 !important;
+    font-size: 0.95rem !important;
+    word-wrap: break-word !important;
+}
+
+.msg.bot {
+    background: rgba(30, 30, 45, 0.85) !important;
+    color: #e0e6ed !important;
+    align-self: flex-start !important;
+}
+
+.msg.user {
+    background: linear-gradient(135deg, #7000ff, #4c00b0) !important;
+    color: white !important;
+    align-self: flex-end !important;
+}
+
+.main-chat {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+/* Mobile specific fix */
+@media screen and (max-width: 768px) {
+    .messages {
+        height: calc(100vh - 130px) !important;
+        padding: 15px !important;
+    }
+    
+    .msg {
+        max-width: 90% !important;
+        padding: 12px 16px !important;
+        font-size: 0.9rem !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -1426,8 +1480,35 @@
         chatContainer.style.overflowY = 'auto';
     });
 </script>
+    <script>
+// Emergency fix - run immediately
+(function() {
+    // Force chat container to be visible
+    const chatContainer = document.getElementById('chatContainer');
+    if (chatContainer) {
+        chatContainer.style.display = 'flex';
+        chatContainer.style.flexDirection = 'column';
+        chatContainer.style.height = 'calc(100vh - 140px)';
+        chatContainer.style.overflowY = 'auto';
+        chatContainer.style.padding = '30px';
+        
+        // Log to see if messages exist
+        console.log('Chat container children:', chatContainer.children.length);
+        console.log('Chat container HTML:', chatContainer.innerHTML);
+    }
+    
+    // Check if messages are empty and add one if needed
+    if (chatContainer && chatContainer.children.length === 0) {
+        const welcomeMsg = document.createElement('div');
+        welcomeMsg.className = 'msg bot';
+        welcomeMsg.innerHTML = "Hello! I'm CASPAM AI. How can I help?";
+        chatContainer.appendChild(welcomeMsg);
+    }
+})();
+</script>
 </body>
 </html>
+
 
 
 
