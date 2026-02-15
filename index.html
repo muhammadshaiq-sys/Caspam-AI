@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>CASPAM AI - 3D Edition</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
-       <style>
+    <style>
         :root {
             --bg-dark: #050510;
             --glass-bg: rgba(20, 20, 35, 0.7);
@@ -50,29 +50,61 @@
             pointer-events: none;
         }
 
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
+        /* Mobile Menu Buttons */
+        .mobile-menu-buttons {
             display: none;
             position: fixed;
             top: 15px;
             left: 15px;
+            right: 15px;
             z-index: 1001;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .menu-btn {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: 10px;
             padding: 12px;
             cursor: pointer;
+            display: flex;
             flex-direction: column;
             gap: 5px;
+            pointer-events: auto;
+            width: 45px;
+            height: 45px;
+            justify-content: center;
+            align-items: center;
         }
 
-        .mobile-menu-btn .bar {
-            width: 25px;
-            height: 3px;
+        .menu-btn .bar {
+            width: 22px;
+            height: 2px;
             background: var(--primary);
             border-radius: 3px;
             transition: 0.3s;
+        }
+
+        .menu-btn.left-active .bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .menu-btn.left-active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.left-active .bar:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .menu-btn.right-active .bar:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 5px);
+        }
+        .menu-btn.right-active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-btn.right-active .bar:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -5px);
         }
 
         .mobile-overlay {
@@ -82,9 +114,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 998;
             backdrop-filter: blur(3px);
+        }
+
+        .mobile-overlay.active {
+            display: block;
         }
 
         .app-container {
@@ -116,7 +152,7 @@
         .history-sidebar {
             width: 300px;
             background: rgba(10, 10, 20, 0.95);
-            border-right: 1px solid var(--glass-border);
+            border-left: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -225,6 +261,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 8px;
             cursor: pointer;
+            position: relative;
         }
 
         .history-item:hover {
@@ -242,6 +279,7 @@
             font-weight: 600;
             color: white;
             margin-bottom: 4px;
+            padding-right: 40px;
         }
 
         .history-item-preview {
@@ -250,6 +288,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            padding-right: 40px;
         }
 
         .history-item-date {
@@ -259,10 +298,13 @@
         }
 
         .history-item-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
             display: flex;
-            gap: 10px;
-            margin-top: 5px;
+            gap: 5px;
             opacity: 0;
+            transition: opacity 0.2s;
         }
 
         .history-item:hover .history-item-actions {
@@ -451,9 +493,16 @@
             margin-top: 10px;
         }
 
+        /* Desktop styles */
+        @media screen and (min-width: 769px) {
+            .history-sidebar {
+                border-left: 1px solid var(--glass-border);
+            }
+        }
+
         /* ========== MOBILE STYLES ========== */
         @media screen and (max-width: 768px) {
-            .mobile-menu-btn {
+            .mobile-menu-buttons {
                 display: flex;
             }
 
@@ -463,7 +512,7 @@
                 top: 0;
                 bottom: 0;
                 width: 280px;
-                z-index: 1000;
+                z-index: 999;
                 transition: left 0.3s ease;
                 background: rgba(10, 10, 20, 0.98);
             }
@@ -474,9 +523,10 @@
                 top: 0;
                 bottom: 0;
                 width: 280px;
-                z-index: 1000;
+                z-index: 999;
                 transition: right 0.3s ease;
                 background: rgba(10, 10, 20, 0.98);
+                border-left: none;
             }
 
             .sidebar.mobile-open {
@@ -487,30 +537,30 @@
                 right: 0;
             }
 
-            .mobile-overlay.active {
-                display: block;
-            }
-
             .app-container {
                 width: 100%;
+                flex-direction: column;
             }
 
             .main-chat {
                 width: 100%;
+                height: 100vh;
             }
 
             .header {
                 padding: 15px;
                 padding-left: 70px;
+                padding-right: 70px;
+                text-align: center;
             }
 
             .messages {
                 padding: 15px;
-                height: calc(100vh - 140px);
+                height: calc(100vh - 130px);
             }
 
             .msg {
-                max-width: 95%;
+                max-width: 90%;
                 padding: 12px 16px;
                 font-size: 0.9rem;
             }
@@ -533,7 +583,7 @@
             }
 
             .history-item-actions {
-                opacity: 1;
+                opacity: 0.7;
             }
         }
 
@@ -544,6 +594,7 @@
 
             .header {
                 padding-left: 65px;
+                padding-right: 65px;
             }
 
             .header div {
@@ -551,7 +602,7 @@
             }
 
             .msg {
-                max-width: 98%;
+                max-width: 95%;
                 padding: 10px 14px;
                 font-size: 0.85rem;
             }
@@ -570,19 +621,26 @@
 <body>
     <canvas id="bgCanvas"></canvas>
 
-    <!-- Mobile Menu Button -->
-    <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
+    <!-- Mobile Menu Buttons -->
+    <div class="mobile-menu-buttons">
+        <div class="menu-btn" id="leftMenuBtn" onclick="toggleLeftMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="menu-btn" id="rightMenuBtn" onclick="toggleRightMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
     </div>
 
     <!-- Mobile Overlay -->
-    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-overlay" onclick="closeAllMenus()"></div>
 
     <div class="app-container">
         <!-- Left Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="leftSidebar">
             <div class="brand">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
@@ -607,20 +665,10 @@
             </div>
         </aside>
 
-        <!-- History Sidebar -->
-        <aside class="history-sidebar">
-            <div class="history-header">
-                <h3>Chat History</h3>
-                <button onclick="exportHistory()" class="history-btn">📥</button>
-                <button onclick="importHistory()" class="history-btn">📤</button>
-            </div>
-            <div id="historyList" class="history-list"></div>
-        </aside>
-
         <!-- Main Chat Area -->
         <main class="main-chat">
             <header class="header">
-                <div style="font-weight: 600; font-size: 1.1rem; display:flex; align-items:center;">
+                <div style="font-weight: 600; font-size: 1.1rem; display:flex; align-items:center; justify-content:center;">
                     <span class="status-dot"></span> CASPAM Assistant (Online)
                 </div>
             </header>
@@ -637,6 +685,16 @@
                 </button>
             </div>
         </main>
+
+        <!-- History Sidebar -->
+        <aside class="history-sidebar" id="historySidebar">
+            <div class="history-header">
+                <h3>Chat History</h3>
+                <button onclick="exportHistory()" class="history-btn">📥</button>
+                <button onclick="importHistory()" class="history-btn">📤</button>
+            </div>
+            <div id="historyList" class="history-list"></div>
+        </aside>
     </div>
 
     <!-- Settings Modal -->
@@ -655,16 +713,12 @@
            1. CONFIGURATION & DATA
            ======================================== */
 
-        // PASTE YOUR NEW BASE64 CODE FROM ADMIN.HTML HERE
-        // If this is the old/short string, it WILL fail to read Roles/Events.
         const CONFIG_CODE = "eyJtaXNzaW9uIjoiQ0FTUEFNIGVudmlzaW9ucyB0byBhdHRhaW4gaGVpZ2h0cyBvZiBleGNlbGxlbmNlIHRocm91Z2ggcXVhbGl0eSBhY2FkZW1pYyB0ZWFjaGluZywgbGVhcm5pbmcgYW5kIHJlc2VhcmNoIHNvIGFzIHRvIGRldmVsb3AgaW5kaXZpZHVhbHMsIGluZHVzdHJ5IGFuZCBzb2NpZXR5IGludGVsbGVjdHVhbGx5LCBwcm9mZXNzaW9uYWxseSBhbmQgZXRoaWNhbGx5LiBDQVNQQU0gaXMgd29ya2luZyB3aXRoIG1pc3Npb25hcnkgemVhbCBhbmQgemVzdCB0byBhZHZhbmNlIHVuaWZpY2F0aW9uIG9mIHdvcmxkbHkga25vd2xlZGdlIG9mIFNjaWVuY2VzLCBBcnRzLCBIdW1hbml0aWVzIGFuZCBvdGhlciBhcmVhcyBvZiBzY2hvbGFyc2hpcCB0aHJvdWdoIGhpZ2ggcXVhbGl0eSBpbnRlci1kaXNjaXBsaW5hcnkgaW5ub3ZhdGl2ZSB0ZWFjaGluZywgbGVhcm5pbmcgYW5kIHJlc2VhcmNoIGluIHRoZSBmaWVsZHMgb2YgUHVyZSwgQXBwbGllZCwgQ29tcHV0YXRpb25hbCwgRmluYW5jaWFsIGFuZCBJbmR1c3RyaWFsIE1hdGhlbWF0aWNzIGFuZCBkZXZlbG9wIGludGVsbGVjdHVhbCwgZXhwZXJ0LCBwcm9mZXNzaW9uYWwgYW5kIGV0aGljYWwgaHVtYW4gcmVzb3VyY2UgbmVjZXNzYXJ5IGZvciB0ZWNobm9sb2dpY2FsIGRldmVsb3BtZW50IG9mIGluZHVzdHJ5IGFuZCBiZXR0ZXJtZW50IG9mIHNvY2lldHkgYW5kIGh1bWFuaXR5IHRvIHJlYWxpemUgaXRzIG1vdHRvIOKAnE1hdGhlbWF0aWNzIGZvciBJbmR1c3RyeSwgU29jaWV0eSBhbmQgSHVtYW5pdHnigJ0uIiwiYWJvdXQiOiJDQVNQQU0gaGFzIGVzdGFibGlzaGVkIGEgaGlnaCByZXB1dGF0aW9uIGZvciBpdHMgZXhjZXB0aW9uYWwgc3RhbmRhcmRzIGluIHRlYWNoaW5nLCByZXNlYXJjaCBhbmQgaG9saXN0aWMgZGV2ZWxvcG1lbnQuIEhpZ2hseSBxdWFsaWZpZWQgZmFjdWx0eSB3aXRoIHNvdW5kIHByb2Zlc3Npb25hbCBhbmQgbW9yYWwgdmFsdWVzLCBvcGVuLCBpbmNsdXNpdmUsIGNvbXBldGl0aXZlLCBlbmNvdXJhZ2luZywgc3VwcG9ydGl2ZSBhbmQgY29uZHVjaXZlIHRlYWNoaW5nIGFuZCBsZWFybmluZyBlbnZpcm9ubWVudCwgaW5ub3ZhdGl2ZSwgaW50ZXJhY3RpdmUgYW5kIHRlY2hub2xvZ3ktYmFzZWQgbWV0aG9kcyBvZiB0ZWFjaGluZyBsZWFkaW5nIHRvIG91dGNvbWUgYmFzZWQgZWR1Y2F0aW9uLCBzdGF0ZSBvZiB0aGUgYXJ0IGluZnJhc3RydWN0dXJlLCBzdHVkZW50cyBjb3VuY2lscyBmb3IgZGV2ZWxvcGluZyBsZWFkZXJzaGlwIHF1YWxpdGllcyBhbmQgc29mdCBza2lsbHMsIGFjdGl2aXRpZXMgcHJvbW90aW5nIGFjYWRlbWlhLWluZHVzdHJ5IGxpbmthZ2VzLCBtb2Rlcm4gYW5kIGRpdmVyc2UgYXJlYXMgb2YgcmVzZWFyY2ggYW5kIHN0cm9uZyBhbHVtbmkgbmV0d29yayBoYXZlIG1hZGUgQ0FTUEFNIGFuIGV4Y2VwdGlvbmFsbHkgYXR0cmFjdGl2ZSBwbGFjZSBpbXBhcnRpbmcgdW5kZXJncmFkdWF0ZSBhbmQgZ3JhZHVhdGUgc3R1ZGllcyBmb3IgaGlnaGx5IG1vdGl2YXRlZCwgY2FyZWVyb3JpZW50ZWQgYW5kIGZvY3VzZWQgc3R1ZGVudHMuIENBU1BBTSBiZWxpZXZlcyBpbiBhbmQgZW5kZWF2b3JzIGZvciBob2xpc3RpYyBkZXZlbG9wbWVudCBvZiBpdHMgc3R1ZGVudHMgYW5kIG1ha2luZyB0aGVtIGNyZWF0aXZlLCBpbm5vdmF0aXZlIGFuZCBjYXBhYmxlIG9mIGNvbmR1Y3RpbmcgY3V0dGluZy1lZGdlIHJlc2VhcmNoIHNvIHRoYXQgdGhleSBtYXkgZWZmZWN0aXZlbHkgcGxheSB0aGVpciByb2xlIGluIHRyYW5zZm9ybWluZyB0aGUgaW5kdXN0cnksIHNvY2lldHkgYW5kIGh1bWFuaXR5IHNvIGFzIHRvIG1ha2UgdGhpcyB3b3JsZCBwZWFjZWZ1bCBhbmQgY29tZm9ydGFibGUgdG8gbGl2ZSBpbi4gQXQgQ0FTUEFNLCB3ZSByZWNvZ25pemUgdGhlIGdyb3dpbmcgc2lnbmlmaWNhbmNlIG9mIHRoZSByb2xlIG9mIE1hdGhlbWF0aWNzLCBpbiBnZW5lcmFsLCBpbiB0aGUgcHJlc2VudC1kYXkgd29ybGQgYW5kIHRoYXQgb2YgYnVzaW5lc3MsIGluZHVzdHJpYWwsIGZpbmFuY2lhbCBhbmQgY29tcHV0YXRpb25hbCBNYXRoZW1hdGljcyBpbiBwYXJ0aWN1bGFyIGFuZCBpdHMgaW50ZWdyYXRpb24gd2l0aCB0aGUgYXJ0aWZpY2lhbCBpbnRlbGxpZ2VuY2UgKEFJKSwgZGF0YSBzY2llbmNlLCBpbmZvcm1hdGljcywgaW5mb3JtYXRpb24gdGVjaG5vbG9naWVzLCBhbmQgbWFjaGluZSBsZWFybmluZyBmb3IgbWVldGluZyB0aGUgY2hhbGxlbmdlcyBvZiBpbmR1c3RyaWFsIHJldm9sdXRpb25zIDQuMCBhbmQgNS4wIGFuZCBhY2hpZXZpbmcgc3VzdGFpbmFibGUgZGV2ZWxvcG1lbnQgZ29hbHMgKFNER3MpLiBXZSBvZmZlciBCUywgTVMvTVBoaWwgYW5kIFBoRCBpbiBNYXRoZW1hdGljcyB0b2dldGhlciB3aXRoIHRoZXNlIG1vZGVybiBhcmVhcyBvZiBrbm93bGVkZ2UgYW5kIHNraWxscyBzbyB0aGF0IG91ciBncmFkdWF0ZXMgY291bGQgZW1iYXJrIG9uIGFuIGV4Y2l0aW5nIGpvdXJuZXkgb2YgZXhwbG9yYXRpb24sIGRpc2NvdmVyeSwgaW50ZWxsZWN0dWFsIGdyb3d0aCBhbmQgcGVyc29uYWwgZGV2ZWxvcG1lbnQsIGFuZCBwdXJzdWUgYSBjYXJlZXIgcGF0aCBvZiB0aGVpciBvd24gaW50ZXJlc3Qgb3V0IG9mIHRoZSBkaXZlcnNlIGNhcmVlciBwYXRocyBhdmFpbGFibGUgYXQgQ0FTUEFNLlxuXG5PdXIgc3R1ZHkgcHJvZ3JhbXMgZm9jdXMgb24gY3JpdGljYWwgdGhpbmtpbmcsIGFwcGx5aW5nIGZ1bmRhbWVudGFsIGNvbmNlcHRzLCBhbmFseXppbmcgcmVhbGxpZmUgcHJvYmxlbXMsIGlkZWEgZ2VuZXJhdGlvbiwgbW9kZWwgZGV2ZWxvcG1lbnQsIGFsZ29yaXRobSB3cml0aW5nLCBhbmQgc29sdXRpb24gdW5kZXJzdGFuZGluZy4gTWF0aGVtYXRpY3MsIGFsb25nc2lkZSB0YWJsZXMgYW5kIGdyYXBocywgYWlkcyBpbiBtb2RlbGluZyBhbmQgY29tcHJlaGVuZGluZyBwcm9ibGVtcyBmcm9tIHZhcmlvdXMgZmllbGRzLiBTdHVkZW50cyBub3Qgb25seSBnYWluIHRlcm1pbm9sb2d5IGZvciBncmFzcGluZyBjb25jZXB0cyBpbiBzY2llbmNlLCB0ZWNobm9sb2d5LCBlbmdpbmVlcmluZywgYnVzaW5lc3MsIGVjb25vbWljcywgZmluYW5jZSwgZGVjaXNpb24gbWFraW5nLCBhbmQgZGF0YSBtaW5pbmcgYnV0IGFsc28gbGVhcm4gY3JpdGljYWwgYW5kIGFuYWx5dGljYWwgdGhpbmtpbmcsIHF1YW50aXRhdGl2ZSByZWFzb25pbmcsIGFuZCBjb25jZXB0IGdlbmVyYWxpemF0aW9uLiBCeSBzdGF5aW5nIHVwLXRvLWRhdGUgd2l0aCB0aGUgbGF0ZXN0IGRldmVsb3BtZW50cyBpbiBNYXRoZW1hdGljcywgb3VyIHByb2dyYW1zIGVuc3VyZSB0aGF0IHN0dWRlbnRzIGFyZSB3ZWxscHJlcGFyZWQgdG8gdGFja2xlIHJlYWwtd29ybGQgY2hhbGxlbmdlcyBhbmQgY29udHJpYnV0ZSB0byB0aGUgYWR2YW5jZW1lbnQgb2YgdGhlIGRpc2NpcGxpbmUuIFRoaXMgbWFrZXMgdGhlbSBjYXBhYmxlIG9mIGZpbmRpbmcgcm9sZXMgc3VjaCBhcyBkYXRhIHNjaWVudGlzdHMsIGFjdHVhcmllcywgYnVzaW5lc3MgYW5kIGZpbmFuY2lhbCBhbmFseXN0cywgaW5kdXN0cmlhbCByZXNlYXJjaGVycyBhbmQgcHJvYmxlbS1zb2x2ZXJzIGluIHRoZSBhcmVhcyBvZiBkZXNpZ24sIGFuYWx5c2lzLCBvcHRpbWl6YXRpb24gYW5kIGF1dG9tYXRpb24uIiwiZ29hbHMiOiIxLiBFc3RhYmxpc2ggYSByZXNlYXJjaCBjdWx0dXJlLjxicj4yLiBNb2Rlcm5pemUgY3VycmljdWx1bSB3aXRoIEFJL01MLjxicj4zLiBQcm9tb3RlIG1hdGhlbWF0aWNhbCB0aGlua2luZyBpbiBkYWlseSBsaWZlLiIsInJvbGVzIjoiRGlyZWN0b3I6IFByb2YuRHIuIEltcmFuIEphdmVkPGJyPkRlcGFydG1lbnRhbCBTdHVkZW50IEFkdmlzb3IoRFNBKTogUHJvZi4gRHIuIFN5ZWQgQWh0c2hhbS1VbC1IYXEgQm9raGFyaSAoRm9yIG1hbGUpICYgRHIuIFNhZmlhIE1pcnphIChGb3IgRmVtYWxlKTxicj5EZXBhcnRtZW50YWwgRXhhbWluYXRpb24gSW5jaGFyZ2U6IERyLiBNdWhhbW1hZCBBc2lmPGJyPiBDbGVyazogRmFpc2FsIEJhandhIDxicj4gUmVzdWx0IG9yZ2FuaXplcjogTXVoYW1tYWQgV2FxYXM8YnI+TGFiIEluY2hhcmdlOiBNdWhhbW1hZCBJbXJhbjxicj4iLCJmYWN1bHR5IjoiUHJvZi5Eci5JbXJhbiBKYXZlZCB8IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9NDUzfCBEZXRhaWxzOiBNeSBjb3Vyc2VzIGluY2x1ZGUgQWN0dWFyaWFsIE1hdGhlbWF0aWNzLCBNYXRoZW1hdGljYWwgRm91bmRhdGlvbnMgb2YgRmluYW5jZSwgQnVzaW5lc3MgQW5hbHl0aWNzLCBPcGVyYXRpb25zIFJlc2VhcmNoLCBEYXRhIEFuYWx5c2lzIHVzaW5nIEV4Y2VsLCBPcHRpbWl6YXRpb24gVGhlb3J5LCBQcm9iYWJpbGl0eSBUaGVvcnkgYW5kIE1hdGhlbWF0aWNhbCBTdGF0aXN0aWNzLCBMaW5lYXIgQWxnZWJyYSwgTWF0cml4IENvbXB1dGF0aW9uLCBDYWxjdWx1cyBJLUlJSSwgUmVhbCBBbmFseXNpcywgQ29udHJvbCBUaGVvcnksIENvbWJpbmF0b3JpY3MgYW5kIEdyYXBoIFRoZW9yeSwgQWxnZWJyYWljIEdyYXBoIFRoZW9yeSwgT3JkaW5hcnkgJiBQYXJ0aWFsIERpZmZlcmVudGlhbCBFcXVhdGlvbiwgRnV6enkgR3JhcGhzIGFuZCBGdXp6eSBIeXBlcmdyYXBocywgQ29tcGxleCBBbmFseXNpcywgQWxnZWJyYSwgR3JvdXAgVGhlb3J5IGFuZCBNYXRoZW1hdGljYWwgTWV0aG9kcy1JLiBcblByb2YuRHIuIEtoYWxpZCBTYWlmdWxsYWggU3llZCB8IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9NDk2IHwgRGV0YWlsczogQ29tcHV0YXRpb25hbCBGbHVpZCBEeW5hbWljcywgT3B0aW1hbCBTaGFwZS9TeXN0ZW0gRGVzaWduLCBIZWF0IEV4Y2hhbmdlcnMsIFNwZWVjaCBQcm9kdWN0aW9uLCBJbnRlcm5hbCBDb21idXN0aW9uIEVuZ2luZXMsIE1vZGVsaW5nIGFuZCBTaW11bGF0aW9uIG9mIEluZHVzdHJpYWwgU3lzdGVtcywgQU5OIE1vZGVsaW5nLCBJbnRlbGxpZ2VudCBDb250cm9sIFN5c3RlbXMsIERhdGEtZHJpdmVuIFN5c3RlbXMsIEZhdWx0IERpYWdub3N0aWMgU3lzdGVtcywgUXVhbnR1bSBDb21wdXRpbmcsIFF1YW50dW0gTWFjaGluZSBMZWFybmluZy5cblByb2YgRHIuIE11aGFtbWFkIEFzaHJhZiB8IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9NDk3IHwgRGV0YWlsczogRmx1aWQgZHluYW1pY3MsIENGRCwgSGVhdCBhbmQgbWFzcyB0cmFuc2ZlciwgSHlicmlkIG5hbm9mbHVpZHMsIGJpb2ZsdWlkcy5cblByb2YgRHIuIFVzbWFuIEFsaSB8IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9NDk4IHwgRGV0YWlsczogS25vdCBUaGVvcnksIENvbWJpbmF0b3JpY3MsIEFsZ2VicmFpYyBHcmFwaCBUaGVvcnksIE1hdHJvaWQgVGhlb3J5LCBMb3ctRGltZW5zaW9uYWwgVG9wb2xvZ3lcblByb2YgRHIuIEZhaXNhbCBBbGkgfCBQcm9mZXNzb3IgfCBMaW5rOiBodHRwczovL2J6dS5lZHUucGsvdmlld19mYWN1bHR5LnBocD9kZXB0SUQ9NDAmZmFjdWx0eUlEPTUwMCB8IERldGFpbHM6TnVtZXJpY2FsIEFuYWx5c2lzLCBOdW1lcmljYWwgRnVuY3Rpb25hbCBBbmFseXNpcywgR3JhcGggVGhlb3J5LCBSaW5nIFRoZW9yeSwgRml4ZWQgUG9pbnQgVGhlb3J5LCBBSSBCYXNlZCBEZWNpc2lvbiBNYWtpbmcuXG5Qcm9mIERyLiBGaXphIFphZmFyIHwgUHJvZmVzc29yIHwgTGluazogaHR0cHM6Ly9ienUuZWR1LnBrL3ZpZXdfZmFjdWx0eS5waHA/ZGVwdElEPTQwJmZhY3VsdHlJRD01MDEgfCBEZXRhaWxzOkluZm9ybWF0aW9uLXRoZW9yZXRpYyBpbmVxdWFsaXRpZXMsIE51bWVyaWNhbCBzb2x1dGlvbiBhbmQgc3RhYmlsaXR5IGFuYWx5c2lzIG9mIG5vbmxpbmVhciBhbGdlYnJhaWMgZXF1YXRpb25zLCBOdW1lcmljYWwgb3B0aW1pemF0aW9uIHVzaW5nIG1ldGFoZXVyaXN0aWMgYWxnb3JpdGhtcywgTWF0cml4IGFuZCB0ZW5zb3IgZGVjb21wb3NpdGlvbnMgZm9yIGRhdGEgYW5hbHlzaXMuXG5Qcm9mIERyLiBTeWVkIEFodHNoYW0tVWwtSGFxIEJva2hhcmkgfCBQcm9mZXNzb3IgfCBMaW5rOiBodHRwczovL2J6dS5lZHUucGsvdmlld19mYWN1bHR5LnBocD9kZXB0SUQ9NDAmZmFjdWx0eUlEPTUwMiB8IERldGFpbHM6IERpc2NyZXRlIE1hdGhlbWF0aWNzOiBDb21iaW5hdG9yaWNzIGFuZCBHcmFwaCBUaGVvcnksIENyeXB0b2dyYXBoeS5cbkRyLiBNdWhhbW1hZCBBc2lmIHxBc3NvY2lhdGUgUHJvZmVzc29yIHwgTGluazogaHR0cHM6Ly9ienUuZWR1LnBrL3ZpZXdfZmFjdWx0eS5waHA/ZGVwdElEPTQwJmZhY3VsdHlJRD02MTUgfCBEZXRhaWxzOkZ1bmN0aW9uYWwgQW5hbHlzaXMsIEhhcm1vbmljIEFuYWx5c2lzLlxuRHIuIEF3YWlzIFlvbnVzIHxBc3NvY2lhdGUgUHJvZmVzc29yIHwgTGluazogaHR0cHM6Ly9ienUuZWR1LnBrL3ZpZXdfZmFjdWx0eS5waHA/ZGVwdElEPTQwJmZhY3VsdHlJRD04NTN8IERldGFpbHM6Q29udHJvbCBUaGVvcnksIEZyYWN0aW9uYWwgRGlmZmVyZW50aWFsIEVxdWF0aW9ucywgSW50ZXJ2YWwgQW5hbHlzaXMsIFRpbWUgU2NhbGUgQ2FsY3VsdXMsIEludmVudG9yeSBNYW5hZ2VtZW50IE1vZGVsaW5nLlxuRHIuIEFzZmFuZCBGYWhhZCB8QXNzb2NpYXRlIFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9NTA4IHwgRGV0YWlsczpNYXRoZW1hdGljYWwgQW5hbHlzaXMsIE1hdGhlbWF0aWNhbCBJbmVxdWFsaXRpZXMgYW5kIEFwcGxpY2F0aW9ucywgR3JhcGggVGhlb3J5IGFuZCBBcHBsaWNhdGlvbnMuXG5Eci4gQW1qYWQgQWxpIHxBc3NvY2lhdGUgUHJvZmVzc29yIHwgTGluazogaHR0cHM6Ly9ienUuZWR1LnBrL3ZpZXdfZmFjdWx0eS5waHA/ZGVwdElEPTQwJmZhY3VsdHlJRD01MDQgfCBEZXRhaWxzOkFydGlmaWNpYWwgSW50ZWxsaWdlbmNlLCBNYWNoaW5lIExlYXJuaW5nLCBEZWVwIExlYXJuaW5nLCBQYXJhbGxlbCBDb21wdXRpbmcsIFNjaWVudGlmaWMgQ29tcHV0aW5nLCBDb21wdXRhdGlvbmFsIEZsdWlkIER5bmFtaWNzLlxuRHIuIE11aGFtbWFkIElicmFoaW0gfEFzc2lzdGFudCBQcm9mZXNzb3IgfCBMaW5rOiBodHRwczovL2J6dS5lZHUucGsvdmlld19mYWN1bHR5LnBocD9kZXB0SUQ9NDAmZmFjdWx0eUlEPTUwNSB8IERldGFpbHM6R3JhcGggVGhlb3J5LCBOdW1lcmljYWwgQW5hbHlzaXMsIENvbXB1dGVyIE5ldHdvcmtzLCBDcnlwdG9ncmFwaHksIFNlY3VyaXR5IE5ldHdvcmtzLCBUb3BvbG9naWNhbCBHcmFwaCBUaGVvcnkuXG5Eci4gU2hlaHphZCBBaG1lZCB8QXNzaXN0YW50IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9NTA2IHwgRGV0YWlsczpDb21wdXRhdGlvbmFsIEZsdWlkIER5bmFtaWNzLlxuRHIuIEFuYW0gUmFuaSB8QXNzaXN0YW50IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9OTIyIHwgRGV0YWlsczpDb21tdXRhdGl2ZSBBbGdlYnJhLCBDb21iaW5hdG9yaWFsIENvbW11dGF0aXZlIEFsZ2VicmEsIEFsZ2VicmFpYywgQ2hlbWljYWwgJiBDb21wbGV4IE5ldHdvcmsgR3JhcGggVGhlb3J5LCBNYXRoZW1hdGljYWwgTW9kZWxsaW5nLCBHcmFwaCBOZXVyYWwgTmV0d29ya3MgKEdOTikgYW5kIGFwcGxpY2F0aW9ucyBpbiBiaW9sb2d5ICYgY2hlbWlzdHJ5LCBDcnlwdG9ncmFwaGljIGFwcGxpY2F0aW9ucyBvZiBhbGdlYnJhICYgZ3JhcGggdGhlb3J5LlxuRHIuIEF0aGFyIEtoYXJhbCB8QXNzaXN0YW50IFByb2Zlc3NvciB8IExpbms6IGh0dHBzOi8vYnp1LmVkdS5way92aWV3X2ZhY3VsdHkucGhwP2RlcHRJRD00MCZmYWN1bHR5SUQ9MTgyIHwgRGV0YWlsczpBcHBsaWVkIERhdGEgU2NpZW5jZSwgRnV6enkgVG9wb2xvZ2llcywgTUNETSwgU29mdCBhbmQgUm91Z2ggU2V0cyBhbmQgdGhlaXIgVmFyaWFudHMuXG5Eci4gU2FmaWEgTWlyemEgfEFzc2lzdGFudCBQcm9mZXNzb3IgfCBMaW5rOiBodHRwczovL2J6dS5lZHUucGsvdmlld19mYWN1bHR5LnBocD9kZXB0SUQ9NDAmZmFjdWx0eUlEPTUwN3wgRGV0YWlsczpEaWZmZXJlbnRpYWwvUGFydGlhbCBFcXVhdGlvbnMsIER5bmFtaWMgc3lzdGVtcywgRmx1aWQgTWVjaGFuaWNzLCBUaW1lIHNjYWxlIHRoZW9yeS5cbkRyLiBNdWhhbW1hZCBJbXJhbiBLaGFsaWQgfExlY3R1cmVyIHwgTGluazogaHR0cHM6Ly9ienUuZWR1LnBrL3ZpZXdfZmFjdWx0eS5waHA/ZGVwdElEPTQwJmZhY3VsdHlJRD05NTMgfCBEZXRhaWxzOkdyYXBoIFRoZW9yeSwgQ29tcHV0YXRpb25hbCBDcnlwdG9ncmFwaHksIEZ1bmN0aW9uYWwgQW5hbHlzaXMsIE51bWVyaWNhbCBhbmFseXNpcywgQWxnYWJyYVxuIiwicHJvZ3JhbXMiOiJCUyBNYXRoZW1hdGljcywgTVBoaWwgQXBwbGllZCBNYXRoZW1hdGljcywgUGhEIFB1cmUgTWF0aGVtYXRpY3MsIFVuZGVyZ3JhZHVhdGUgUHJvZ3JhbXMsIEJTKDV0aCBTZW1lc3RlcikgUHJvZ3JhbSwgR3JhZHVhdGUgKE1TKVByb2dyYW0sIEdyYWR1YXRlIChQaEQpIFByb2dyYW0sIEFEUCBQcm9ncmFtcywgRGlwbG9tYSBQcm9ncmFtcywgQlMgQUksIEJTIERhdGEgU2NpZW5jZSIsImNvdXJzZXMiOiJNYWNoaW5lIExlYXJuaW5nLCBDcnlwdG9ncmFwaHksIFdlYiBUZWNobm9sb2d5LCBNYXRoZW1hdGljYWwgTW9kZWxpbmcsIFBvcnRmb2xpbyBUaGVvcnkgYW5kIFJpc2sgTWFuYWdlbWVudCwgQnVzaW5lc3MgSW50ZWxsaWdlbmNlLCBEYXRhIEFuYWx5dGljcywgQWN0dXJpYWwgTWF0aGVtYXRpY3MsIERlZXAgTGVhcm5pbmcsIFRpbWUgU2VyaWVzIEFuYWx5c2lzLCBPcGVyYXRpb24gUmVzZWFyY2goTWFuYWdlbWVudCBTY2llbmNlKSwgTWVhc3VyZSBUaGVvcnksIE9wdGltaXphdGlvbiBUaGVvcnksIEZ1bmN0aW9uYWwgQW5hbHlzaXMsIFJlYWwgQW5hbHlzaXMsIFN0b2NoYXN0aWMgQ2FsY3VsdXMsIE51bWVyaWNhbCBBbmFseXNpcywgR3JhcGggVGhlb3J5LCBMaW5lYXIgUHJvZ3JhbW1pbmcsIFByb2JhYmlsaXR5IGFuZCBTdGF0aXN0aWNzLCBQcm9ncmFtbWluZyB3aXRoIHB5dGhvbiwgT2JqZWN0IE9yaWVudGVkIFByb2dyYW1taW5nLCBEZXNpZ24gYW5kIEFuYWx5c2lzIG9mIEFsZ29yaXRobXMsIENhbGN1bHVzLCBEaXNjcmV0ZSBNYXRoZW1hdGljcywgT3JkaW5hcnkgRGlmZmVyZW50aWFsIEVxdWF0aW9ucywgUGFydGlhbCBEaWZmZXJlbnRpYWwgRXF1YXRpb25zLCBNYXBwbGUsIE1BVExBQiwgRm91bmRhdGlvbiBhbmQgYXBwbGljYXRpb25zIG9mIEdlbmVyYXRpdmUgQUksIEZ1enp5IFNldCBUaGVvcnksIEdhbWUgVGhlb3J5LCBDbGFzc2ljYWwgTWVjaGFuaWNzLCBDb21wbGV4IEFuYWx5c2lzLCBEYXRhIFN0cnVjdHVyZSBhbmQgQWxnb3JpdGhtcywgVmVjdG9yIGFuZCBUZW5zb3IgQW5hbHlzaXMsIEdyb3VwIFRoZW9yeSwgVG9wbG9neSBhbmQgTWV0cmljIFNwYWNlcyIsImV2ZW50cyI6IkFubnVhbCBNYXRoIE9seW1waWFkIChPY3QgMjAyNikgfCBEZXRhaWxzOiBBIGNvbXBldGl0aW9uIGZvciBhbGwgdW5pdmVyc2l0eSBzdHVkZW50cy4gVmVudWU6IE1haW4gSGFsbC5cblFhd2FsaSBOaWdodCBhbmQgQW5udWFsIEZ1bmN0aW9uIChGZWIgMTEsIDIwMjYpIHwgRGV0YWlsczogVG8gZW50ZXJ0YWluIHN0dWRlbnRzIGFuZCBwb2xpc2hpbmcgdGhlIGhpZGRlbiBza2lsbHMgb2YgdGhlIHN0dWRlbnRzIHRocm91Z2ggdGhlaXIgdGFsZW50IGluIHZhcmlvdXMgZmllbGRzLlxuU3BvcnRzIEdhbGEgKEZlYiA5ICYgRmViIDEwLCAyMDI2KSB8IERldGFpbHM6IEZvciBleHRyYSBjdXJyaWN1bGFyIEFjdGl2aXRpZXMgb2Ygc3R1ZGVudHMgaW5jbHVkaW5nIHNwb3J0cyBcbjEuIENyaWNrZXQgXG4yLiBGb290YmFsbCBcbjMuIEJhZG1pbnRvbiBcbjQuIFRhYmxlIFRlbm5pc1xuNS4gMTAwIE1ldGVyIFJhY2VcbjYuIFR1ZyBPZiBXYXJcbjcuIEx1ZG8gXG44LiAzMDAgTWV0ZXIgUmFjZSJ9";
-
 
         let DEPT_DATA = {};
         let dataLoadError = false;
-        // Load Data
+
         try {
-            // Check if config code is just the placeholder I gave
             if (CONFIG_CODE.includes("Placeholder") || CONFIG_CODE.length < 100) {
                 throw new Error("Config code appears to be a placeholder.");
             }
@@ -680,7 +734,6 @@
                 return "ERROR: Configuration Code is invalid or incomplete. Please regenerate code in admin.html and paste it into index.html.";
             }
 
-            // Build context dynamically only if data exists
             let contextStr = "You are a helpful, professional AI for CASPAM (BZU Multan).\n\n";
 
             if (DEPT_DATA.mission) contextStr += `MISSION: ${DEPT_DATA.mission}\n`;
@@ -713,7 +766,6 @@
                 });
                 scrollToBottom();
             } else {
-                // Initial check
                 if (dataLoadError) {
                     renderMessage("System Error: The Configuration Code in this file is invalid. Please open admin.html, click 'Generate', and paste the new code into index.html.", 'error', false);
                 } else {
@@ -739,14 +791,15 @@
                 content: msg.content
             }));
         }
-function clearHistory() {
-    if (confirm('Delete ALL chat history?')) {
-        localStorage.removeItem('caspam_sessions');
-        localStorage.removeItem(HISTORY_KEY);
-        chatSessions = { current: null, sessions: {} };
-        createNewSession();
-    }
-}
+
+        function clearHistory() {
+            if (confirm('Delete ALL chat history?')) {
+                localStorage.removeItem('caspam_sessions');
+                localStorage.removeItem(HISTORY_KEY);
+                chatSessions = { current: null, sessions: {} };
+                createNewSession();
+            }
+        }
 
         /* ========================================
            3. ENHANCED MARKDOWN PARSER
@@ -769,65 +822,63 @@ function clearHistory() {
            ======================================== */
 
         function renderMessage(text, type, save = true) {
-    const container = document.getElementById('chatContainer');
-    const div = document.createElement('div');
-    div.className = `msg ${type}`;
-    div.innerHTML = type === 'bot' ? parseMarkdown(text) : text.replace(/\n/g, '<br>');
-    container.appendChild(div);
-    scrollToBottom();
-    
-    if (save) {
-        saveToHistory(type === 'bot' ? 'assistant' : 'user', text);
-        // ✅ ADD THIS LINE
-        saveMessageToSession(type === 'bot' ? 'assistant' : 'user', text);
-    }
-}
+            const container = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = `msg ${type}`;
+            div.innerHTML = type === 'bot' ? parseMarkdown(text) : text.replace(/\n/g, '<br>');
+            container.appendChild(div);
+            scrollToBottom();
+            
+            if (save) {
+                saveToHistory(type === 'bot' ? 'assistant' : 'user', text);
+                saveMessageToSession(type === 'bot' ? 'assistant' : 'user', text);
+            }
+        }
 
         function scrollToBottom() {
             const container = document.getElementById('chatContainer');
             container.scrollTop = container.scrollHeight;
         }
 
-async function sendMessage() {
-    const input = document.getElementById('userInput');
-    const text = input.value.trim();
-    if (!text) return;
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
 
-    renderMessage(text, 'user');
-    input.value = '';
-    const loadingId = showLoading();
+            renderMessage(text, 'user');
+            input.value = '';
+            const loadingId = showLoading();
 
-    try {
-        const chatHistory = getHistoryForAPI();
-        const apiMessages = [
-            { role: "system", content: getContext() },
-            ...chatHistory,
-            { role: "user", content: text }
-        ];
+            try {
+                const chatHistory = getHistoryForAPI();
+                const apiMessages = [
+                    { role: "system", content: getContext() },
+                    ...chatHistory,
+                    { role: "user", content: text }
+                ];
 
-        // 👇 CALL YOUR BACKEND INSTEAD OF GROQ DIRECTLY
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                messages: apiMessages
-            })
-        });
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        messages: apiMessages
+                    })
+                });
 
-        if (!response.ok) throw new Error("API Connection Failed");
+                if (!response.ok) throw new Error("API Connection Failed");
 
-        const data = await response.json();
-        removeLoading(loadingId);
-        const botReply = data.choices[0].message.content;
-        renderMessage(botReply, 'bot');
+                const data = await response.json();
+                removeLoading(loadingId);
+                const botReply = data.choices[0].message.content;
+                renderMessage(botReply, 'bot');
 
-    } catch (error) {
-        removeLoading(loadingId);
-        renderMessage(`Error: ${error.message}.`, 'error');
-    }
-}
+            } catch (error) {
+                removeLoading(loadingId);
+                renderMessage(`Error: ${error.message}.`, 'error');
+            }
+        }
 
         function showLoading() {
             const container = document.getElementById('chatContainer');
@@ -847,8 +898,9 @@ async function sendMessage() {
         }
 
         function resetChat() {
-    createNewSession();  // Replace the old content with this
-}
+            createNewSession();
+        }
+
         function saveApiSettings() {
             const newKey = document.getElementById('apiKeyInput').value.trim();
             if (newKey) API_KEY = newKey;
@@ -856,273 +908,299 @@ async function sendMessage() {
         }
 
         /* ========================================
-           5. EVENTS & INIT
+           5. CHAT HISTORY SIDEBAR FUNCTIONS
            ======================================== */
-/* ========================================
-   7. CHAT HISTORY SIDEBAR FUNCTIONS
-   ======================================== */
 
-// Chat sessions storage
-let chatSessions = {
-    current: null,
-    sessions: {}
-};
-
-// Load sessions from localStorage
-function loadSessions() {
-    const saved = localStorage.getItem('caspam_sessions');
-    if (saved) {
-        chatSessions = JSON.parse(saved);
-    } else {
-        // Create first session
-        createNewSession();
-    }
-    renderHistorySidebar();
-}
-
-// Create new chat session
-function createNewSession() {
-    const sessionId = 'session_' + Date.now();
-    
-    // Save current session first if it exists
-    if (chatSessions.current && chatSessions.sessions[chatSessions.current]) {
-        saveCurrentSession();
-    }
-    
-    chatSessions.current = sessionId;
-    chatSessions.sessions[sessionId] = {
-        id: sessionId,
-        title: 'New Chat',
-        preview: '',
-        messages: [],
-        date: new Date().toISOString()
-    };
-    
-    // Clear chat display
-    document.getElementById('chatContainer').innerHTML = '';
-    renderMessage("Chat session started. How can I help?", 'bot', false);
-    
-    saveSessions();
-    renderHistorySidebar();
-}
-
-// Save current session messages
-function saveCurrentSession() {
-    const sessionId = chatSessions.current;
-    if (!sessionId || !chatSessions.sessions[sessionId]) return;
-    
-    // Get all messages from chat container
-    const container = document.getElementById('chatContainer');
-    const messages = [];
-    
-    container.querySelectorAll('.msg').forEach(msgEl => {
-        const type = msgEl.classList.contains('user') ? 'user' : 'assistant';
-        const content = msgEl.innerText;
-        messages.push({ role: type, content });
-    });
-    
-    chatSessions.sessions[sessionId].messages = messages;
-    
-    // Update preview and title
-    const userMessages = messages.filter(m => m.role === 'user');
-    if (userMessages.length > 0) {
-        chatSessions.sessions[sessionId].preview = userMessages[0].content.substring(0, 50);
-        if (chatSessions.sessions[sessionId].title === 'New Chat') {
-            chatSessions.sessions[sessionId].title = userMessages[0].content.substring(0, 30);
-        }
-    }
-}
-
-// Save message to current session
-function saveMessageToSession(role, content) {
-    const sessionId = chatSessions.current;
-    if (!sessionId) return;
-    
-    if (!chatSessions.sessions[sessionId].messages) {
-        chatSessions.sessions[sessionId].messages = [];
-    }
-    
-    chatSessions.sessions[sessionId].messages.push({ role, content });
-    
-    // Update preview if this is first user message
-    if (role === 'user') {
-        chatSessions.sessions[sessionId].preview = content.substring(0, 50);
-        if (chatSessions.sessions[sessionId].title === 'New Chat') {
-            chatSessions.sessions[sessionId].title = content.substring(0, 30);
-        }
-    }
-    
-    saveSessions();
-    renderHistorySidebar();
-}
-
-// Load a specific session
-function loadSession(sessionId) {
-    // Save current session first
-    saveCurrentSession();
-    
-    const session = chatSessions.sessions[sessionId];
-    if (!session) return;
-    
-    chatSessions.current = sessionId;
-    
-    // Clear and load messages
-    const container = document.getElementById('chatContainer');
-    container.innerHTML = '';
-    
-    session.messages.forEach(msg => {
-        renderMessage(msg.content, msg.role === 'assistant' ? 'bot' : 'user', false);
-    });
-    
-    saveSessions();
-    renderHistorySidebar();
-}
-
-// Delete a session
-// Delete a session
-function deleteSession(sessionId, event) {
-    event.stopPropagation();
-    
-    if (confirm('Delete this chat?')) {
-        // Delete the session
-        delete chatSessions.sessions[sessionId];
-        
-        // Check if there are any sessions left
-        const remainingSessions = Object.keys(chatSessions.sessions).length;
-        
-        if (remainingSessions === 0) {
-            // No sessions left - create a fresh start
-            chatSessions = {
-                current: null,
-                sessions: {}
-            };
-            createNewSession(); // This will create ONE new session
-        } else {
-            // Sessions still exist
-            if (chatSessions.current === sessionId) {
-                // If deleted current session, load the most recent one
-                const sortedSessions = Object.values(chatSessions.sessions)
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
-                loadSession(sortedSessions[0].id);
-            }
-        }
-        
-        saveSessions();
-        renderHistorySidebar();
-    }
-}
-
-// Rename a session
-function renameSession(sessionId, event) {
-    event.stopPropagation();
-    const newTitle = prompt('Enter new chat name:');
-    if (newTitle) {
-        chatSessions.sessions[sessionId].title = newTitle;
-        saveSessions();
-        renderHistorySidebar();
-    }
-}
-
-// Save all sessions to localStorage
-function saveSessions() {
-    localStorage.setItem('caspam_sessions', JSON.stringify(chatSessions));
-}
-
-// Render history sidebar
-// Render history sidebar
-function renderHistorySidebar() {
-    const historyList = document.getElementById('historyList');
-    if (!historyList) return;
-
-    let html = '';
-
-    // Filter out empty sessions (no messages and title is "New Chat")
-    const validSessions = Object.values(chatSessions.sessions)
-        .filter(session => {
-            // Keep session if it has messages OR it's the current active session
-            return (session.messages && session.messages.length > 0) || session.id === chatSessions.current;
-        })
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    if (validSessions.length === 0) {
-        html = '<div style="text-align: center; color: #555; padding: 20px;">No chat history</div>';
-    } else {
-        validSessions.forEach(session => {
-            const isActive = session.id === chatSessions.current;
-            const date = new Date(session.date).toLocaleDateString();
-            const hasMessages = session.messages && session.messages.length > 0;
-            
-            // Only show delete button if session has messages
-            const deleteButton = hasMessages ? 
-                `<button onclick="deleteSession('${session.id}', event)">🗑️</button>` : '';
-
-            html += `
-                <div class="history-item ${isActive ? 'active' : ''}" onclick="loadSession('${session.id}')">
-                    <div class="history-item-title">${session.title}</div>
-                    <div class="history-item-preview">${session.preview || 'No messages'}</div>
-                    <div class="history-item-date">${date}</div>
-                    <div class="history-item-actions">
-                        <button onclick="renameSession('${session.id}', event)">✏️</button>
-                        ${deleteButton}
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    historyList.innerHTML = html;
-}
-// Export history
-function exportHistory() {
-    const dataStr = JSON.stringify(chatSessions, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const link = document.createElement('a');
-    link.setAttribute('href', dataUri);
-    link.setAttribute('download', `caspam-history-${new Date().toISOString().slice(0,10)}.json`);
-    link.click();
-}
-
-// Import history
-function importHistory() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    
-    input.onchange = e => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        
-        reader.onload = event => {
-            try {
-                const imported = JSON.parse(event.target.result);
-                chatSessions = imported;
-                saveSessions();
-                loadSession(chatSessions.current);
-                renderHistorySidebar();
-                alert('History imported successfully!');
-            } catch (error) {
-                alert('Invalid history file');
-            }
+        let chatSessions = {
+            current: null,
+            sessions: {}
         };
-        
-        reader.readAsText(file);
-    };
-    
-    input.click();
-}
-       window.onload = () => {
-    loadSessions();  // Add this line FIRST
-    loadChatHistory();
-    initParticles();
-};
 
-        document.getElementById('userInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        function loadSessions() {
+            const saved = localStorage.getItem('caspam_sessions');
+            if (saved) {
+                chatSessions = JSON.parse(saved);
+            } else {
+                createNewSession();
+            }
+            renderHistorySidebar();
+        }
+
+        function createNewSession() {
+            const sessionId = 'session_' + Date.now();
+
+            if (chatSessions.current && chatSessions.sessions[chatSessions.current]) {
+                saveCurrentSession();
+            }
+
+            chatSessions.current = sessionId;
+            chatSessions.sessions[sessionId] = {
+                id: sessionId,
+                title: 'New Chat',
+                preview: '',
+                messages: [],
+                date: new Date().toISOString()
+            };
+
+            document.getElementById('chatContainer').innerHTML = '';
+            renderMessage("Chat session started. How can I help?", 'bot', false);
+
+            saveSessions();
+            renderHistorySidebar();
+        }
+
+        function saveCurrentSession() {
+            const sessionId = chatSessions.current;
+            if (!sessionId || !chatSessions.sessions[sessionId]) return;
+
+            const container = document.getElementById('chatContainer');
+            const messages = [];
+
+            container.querySelectorAll('.msg').forEach(msgEl => {
+                const type = msgEl.classList.contains('user') ? 'user' : 'assistant';
+                const content = msgEl.innerText;
+                messages.push({ role: type, content });
+            });
+
+            chatSessions.sessions[sessionId].messages = messages;
+
+            const userMessages = messages.filter(m => m.role === 'user');
+            if (userMessages.length > 0) {
+                chatSessions.sessions[sessionId].preview = userMessages[0].content.substring(0, 50);
+                if (chatSessions.sessions[sessionId].title === 'New Chat') {
+                    chatSessions.sessions[sessionId].title = userMessages[0].content.substring(0, 30);
+                }
+            }
+        }
+
+        function saveMessageToSession(role, content) {
+            const sessionId = chatSessions.current;
+            if (!sessionId) return;
+
+            if (!chatSessions.sessions[sessionId].messages) {
+                chatSessions.sessions[sessionId].messages = [];
+            }
+
+            chatSessions.sessions[sessionId].messages.push({ role, content });
+
+            if (role === 'user') {
+                chatSessions.sessions[sessionId].preview = content.substring(0, 50);
+                if (chatSessions.sessions[sessionId].title === 'New Chat') {
+                    chatSessions.sessions[sessionId].title = content.substring(0, 30);
+                }
+            }
+
+            saveSessions();
+            renderHistorySidebar();
+        }
+
+        function loadSession(sessionId) {
+            saveCurrentSession();
+
+            const session = chatSessions.sessions[sessionId];
+            if (!session) return;
+
+            chatSessions.current = sessionId;
+
+            const container = document.getElementById('chatContainer');
+            container.innerHTML = '';
+
+            session.messages.forEach(msg => {
+                renderMessage(msg.content, msg.role === 'assistant' ? 'bot' : 'user', false);
+            });
+
+            saveSessions();
+            renderHistorySidebar();
+            
+            // Close mobile menus after selecting a session
+            if (window.innerWidth <= 768) {
+                closeAllMenus();
+            }
+        }
+
+        function deleteSession(sessionId, event) {
+            event.stopPropagation();
+            
+            if (confirm('Delete this chat?')) {
+                delete chatSessions.sessions[sessionId];
+                
+                const remainingSessions = Object.keys(chatSessions.sessions).length;
+                
+                if (remainingSessions === 0) {
+                    chatSessions = {
+                        current: null,
+                        sessions: {}
+                    };
+                    createNewSession();
+                } else {
+                    if (chatSessions.current === sessionId) {
+                        const sortedSessions = Object.values(chatSessions.sessions)
+                            .sort((a, b) => new Date(b.date) - new Date(a.date));
+                        loadSession(sortedSessions[0].id);
+                    }
+                }
+                
+                saveSessions();
+                renderHistorySidebar();
+            }
+        }
+
+        function renameSession(sessionId, event) {
+            event.stopPropagation();
+            const newTitle = prompt('Enter new chat name:');
+            if (newTitle) {
+                chatSessions.sessions[sessionId].title = newTitle;
+                saveSessions();
+                renderHistorySidebar();
+            }
+        }
+
+        function saveSessions() {
+            localStorage.setItem('caspam_sessions', JSON.stringify(chatSessions));
+        }
+
+        function renderHistorySidebar() {
+            const historyList = document.getElementById('historyList');
+            if (!historyList) return;
+
+            let html = '';
+
+            const validSessions = Object.values(chatSessions.sessions)
+                .filter(session => {
+                    return (session.messages && session.messages.length > 0) || session.id === chatSessions.current;
+                })
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (validSessions.length === 0) {
+                html = '<div style="text-align: center; color: #555; padding: 20px;">No chat history</div>';
+            } else {
+                validSessions.forEach(session => {
+                    const isActive = session.id === chatSessions.current;
+                    const date = new Date(session.date).toLocaleDateString();
+                    const hasMessages = session.messages && session.messages.length > 0;
+                    
+                    const deleteButton = hasMessages ? 
+                        `<button onclick="deleteSession('${session.id}', event)">🗑️</button>` : '';
+
+                    html += `
+                        <div class="history-item ${isActive ? 'active' : ''}" onclick="loadSession('${session.id}')">
+                            <div class="history-item-title">${session.title}</div>
+                            <div class="history-item-preview">${session.preview || 'No messages'}</div>
+                            <div class="history-item-date">${date}</div>
+                            <div class="history-item-actions">
+                                <button onclick="renameSession('${session.id}', event)">✏️</button>
+                                ${deleteButton}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            historyList.innerHTML = html;
+        }
+
+        function exportHistory() {
+            const dataStr = JSON.stringify(chatSessions, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+            const link = document.createElement('a');
+            link.setAttribute('href', dataUri);
+            link.setAttribute('download', `caspam-history-${new Date().toISOString().slice(0, 10)}.json`);
+            link.click();
+        }
+
+        function importHistory() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = event => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        chatSessions = imported;
+                        saveSessions();
+                        loadSession(chatSessions.current);
+                        renderHistorySidebar();
+                        alert('History imported successfully!');
+                    } catch (error) {
+                        alert('Invalid history file');
+                    }
+                };
+
+                reader.readAsText(file);
+            };
+
+            input.click();
+        }
 
         /* ========================================
-           6. 3D VISUALS
+           6. MOBILE MENU FUNCTIONS
+           ======================================== */
+
+        function toggleLeftMenu() {
+            const leftSidebar = document.getElementById('leftSidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            const rightSidebar = document.getElementById('historySidebar');
+            const leftBtn = document.getElementById('leftMenuBtn');
+            
+            leftSidebar.classList.toggle('mobile-open');
+            
+            // Update button animation
+            leftBtn.classList.toggle('left-active');
+            
+            // Close right sidebar if open
+            if (rightSidebar.classList.contains('mobile-open')) {
+                rightSidebar.classList.remove('mobile-open');
+                document.getElementById('rightMenuBtn').classList.remove('right-active');
+            }
+            
+            // Show overlay if either sidebar is open
+            if (leftSidebar.classList.contains('mobile-open') || rightSidebar.classList.contains('mobile-open')) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+
+        function toggleRightMenu() {
+            const rightSidebar = document.getElementById('historySidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            const leftSidebar = document.getElementById('leftSidebar');
+            const rightBtn = document.getElementById('rightMenuBtn');
+            
+            rightSidebar.classList.toggle('mobile-open');
+            
+            // Update button animation
+            rightBtn.classList.toggle('right-active');
+            
+            // Close left sidebar if open
+            if (leftSidebar.classList.contains('mobile-open')) {
+                leftSidebar.classList.remove('mobile-open');
+                document.getElementById('leftMenuBtn').classList.remove('left-active');
+            }
+            
+            // Show overlay if either sidebar is open
+            if (leftSidebar.classList.contains('mobile-open') || rightSidebar.classList.contains('mobile-open')) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+
+        function closeAllMenus() {
+            document.getElementById('leftSidebar').classList.remove('mobile-open');
+            document.getElementById('historySidebar').classList.remove('mobile-open');
+            document.getElementById('leftMenuBtn').classList.remove('left-active');
+            document.getElementById('rightMenuBtn').classList.remove('right-active');
+            document.querySelector('.mobile-overlay').classList.remove('active');
+        }
+
+        /* ========================================
+           7. 3D VISUALS
            ======================================== */
 
         function initParticles() {
@@ -1194,50 +1272,39 @@ function importHistory() {
             init();
             animate();
         }
+
         /* ========================================
-   8. MOBILE MENU FUNCTIONS
-   ======================================== */
+           8. INITIALIZATION
+           ======================================== */
 
-function toggleMobileMenu() {
-    const sidebar = document.querySelector('.sidebar');
-    const historySidebar = document.querySelector('.history-sidebar');
-    const overlay = document.querySelector('.mobile-overlay');
-    
-    sidebar.classList.toggle('mobile-open');
-    historySidebar.classList.toggle('mobile-open');
-    overlay.classList.toggle('active');
-}
+        window.onload = () => {
+            loadSessions();
+            loadChatHistory();
+            initParticles();
+            
+            // Close menus when clicking on main chat area (mobile)
+            document.querySelector('.main-chat').addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    closeAllMenus();
+                }
+            });
+        };
 
-function closeMobileMenu() {
-    const sidebar = document.querySelector('.sidebar');
-    const historySidebar = document.querySelector('.history-sidebar');
-    const overlay = document.querySelector('.mobile-overlay');
-    
-    sidebar.classList.remove('mobile-open');
-    historySidebar.classList.remove('mobile-open');
-    overlay.classList.remove('active');
-}
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
 
-// Close menu when clicking on a nav button (optional)
-document.addEventListener('DOMContentLoaded', function() {
-    const navButtons = document.querySelectorAll('.nav-btn, .history-item');
-    navButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                closeMobileMenu();
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                // On desktop, ensure sidebars are visible and menus closed
+                document.getElementById('leftSidebar').classList.remove('mobile-open');
+                document.getElementById('historySidebar').classList.remove('mobile-open');
+                document.getElementById('leftMenuBtn').classList.remove('left-active');
+                document.getElementById('rightMenuBtn').classList.remove('right-active');
+                document.querySelector('.mobile-overlay').classList.remove('active');
             }
         });
-    });
-});
     </script>
 </body>
-
-
 </html>
-
-
-
-
-
-
-
