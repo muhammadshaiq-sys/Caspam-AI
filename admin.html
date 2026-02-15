@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASPAM - Admin Dashboard (Fixed)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .dashboard {
+            width: 900px;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        h1 {
+            background: linear-gradient(to right, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        p.subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            font-style: italic;
+            background: #f1f5f9;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .form-group textarea,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+
+        .form-group textarea:focus,
+        .form-group input:focus {
+            border-color: #2563eb;
+            outline: none;
+            background: white;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: white;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .output-box {
+            margin-top: 30px;
+            background: #1e293b;
+            color: #34d399;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            display: none;
+            border: 1px solid #334155;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <h1>CASPAM Admin Dashboard</h1>
+        <p class="subtitle">Support for Faculty Links & Detailed Events.</p>
+        <div class="grid">
+            <div class="form-group full-width">
+                <label>Department Mission</label>
+                <textarea
+                    id="inp_mission">CASPAM envisions to attain heights of excellence through quality academic teaching, learning and research so as to develop individuals, industry and society intellectually, professionally and ethically. CASPAM is working with missionary zeal and zest to advance unification of worldly knowledge of Sciences, Arts, Humanities and other areas of scholarship through high quality inter-disciplinary innovative teaching, learning and research in the fields of Pure, Applied, Computational, Financial and Industrial Mathematics and develop intellectual, expert, professional and ethical human resource necessary for technological development of industry and betterment of society and humanity to realize its motto “Mathematics for Industry, Society and Humanity”.</textarea>
+            </div>
+            <div class="form-group">
+                <label>About CASPAM</label>
+                <textarea
+                    id="inp_about">CASPAM has established a high reputation for its exceptional standards in teaching, research and holistic development. Highly qualified faculty with sound professional and moral values, open, inclusive, competitive, encouraging, supportive and conducive teaching and learning environment, innovative, interactive and technology-based methods of teaching leading to outcome based education, state of the art infrastructure, students councils for developing leadership qualities and soft skills, activities promoting academia-industry linkages, modern and diverse areas of research and strong alumni network have made CASPAM an exceptionally attractive place imparting undergraduate and graduate studies for highly motivated, careeroriented and focused students. CASPAM believes in and endeavors for holistic development of its students and making them creative, innovative and capable of conducting cutting-edge research so that they may effectively play their role in transforming the industry, society and humanity so as to make this world peaceful and comfortable to live in. At CASPAM, we recognize the growing significance of the role of Mathematics, in general, in the present-day world and that of business, industrial, financial and computational Mathematics in particular and its integration with the artificial intelligence (AI), data science, informatics, information technologies, and machine learning for meeting the challenges of industrial revolutions 4.0 and 5.0 and achieving sustainable development goals (SDGs). We offer BS, MS/MPhil and PhD in Mathematics together with these modern areas of knowledge and skills so that our graduates could embark on an exciting journey of exploration, discovery, intellectual growth and personal development, and pursue a career path of their own interest out of the diverse career paths available at CASPAM.
+
+Our study programs focus on critical thinking, applying fundamental concepts, analyzing reallife problems, idea generation, model development, algorithm writing, and solution understanding. Mathematics, alongside tables and graphs, aids in modeling and comprehending problems from various fields. Students not only gain terminology for grasping concepts in science, technology, engineering, business, economics, finance, decision making, and data mining but also learn critical and analytical thinking, quantitative reasoning, and concept generalization. By staying up-to-date with the latest developments in Mathematics, our programs ensure that students are wellprepared to tackle real-world challenges and contribute to the advancement of the discipline. This makes them capable of finding roles such as data scientists, actuaries, business and financial analysts, industrial researchers and problem-solvers in the areas of design, analysis, optimization and automation.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Department Goals</label>
+                <textarea
+                    id="inp_goals">1. Establish a research culture.<br>2. Modernize curriculum with AI/ML.<br>3. Promote mathematical thinking in daily life.</textarea>
+            </div>
+            <div class="form-group">
+                <label>Leadership Roles</label>
+                <textarea
+                    id="inp_roles">Director: Prof.Dr. Imran Javed<br>Departmental Student Advisor(DSA): Prof. Dr. Syed Ahtsham-Ul-Haq Bokhari (For male) & Dr. Safia Mirza (For Female)<br>Departmental Examination Incharge: Dr. Muhammad Asif<br> Clerk: Faisal Bajwa <br> Result organizer: Muhammad Waqas<br>Lab Incharge: Muhammad Imran<br></textarea>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Faculty (with Links)</label>
+                <div class="hint">Use this format: Name | Designation | Link: http://url | Details: ...</div>
+                <textarea id="inp_faculty">Prof.Dr.Imran Javed | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=453| Details: My courses include Actuarial Mathematics, Mathematical Foundations of Finance, Business Analytics, Operations Research, Data Analysis using Excel, Optimization Theory, Probability Theory and Mathematical Statistics, Linear Algebra, Matrix Computation, Calculus I-III, Real Analysis, Control Theory, Combinatorics and Graph Theory, Algebraic Graph Theory, Ordinary & Partial Differential Equation, Fuzzy Graphs and Fuzzy Hypergraphs, Complex Analysis, Algebra, Group Theory and Mathematical Methods-I. 
+Prof.Dr. Khalid Saifullah Syed | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=496 | Details: Computational Fluid Dynamics, Optimal Shape/System Design, Heat Exchangers, Speech Production, Internal Combustion Engines, Modeling and Simulation of Industrial Systems, ANN Modeling, Intelligent Control Systems, Data-driven Systems, Fault Diagnostic Systems, Quantum Computing, Quantum Machine Learning.
+Prof Dr. Muhammad Ashraf | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=497 | Details: Fluid dynamics, CFD, Heat and mass transfer, Hybrid nanofluids, biofluids.
+Prof Dr. Usman Ali | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=498 | Details: Knot Theory, Combinatorics, Algebraic Graph Theory, Matroid Theory, Low-Dimensional Topology
+Prof Dr. Faisal Ali | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=500 | Details:Numerical Analysis, Numerical Functional Analysis, Graph Theory, Ring Theory, Fixed Point Theory, AI Based Decision Making.
+Prof Dr. Fiza Zafar | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=501 | Details:Information-theoretic inequalities, Numerical solution and stability analysis of nonlinear algebraic equations, Numerical optimization using metaheuristic algorithms, Matrix and tensor decompositions for data analysis.
+Prof Dr. Syed Ahtsham-Ul-Haq Bokhari | Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=502 | Details: Discrete Mathematics: Combinatorics and Graph Theory, Cryptography.
+Dr. Muhammad Asif |Associate Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=615 | Details:Functional Analysis, Harmonic Analysis.
+Dr. Awais Yonus |Associate Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=853| Details:Control Theory, Fractional Differential Equations, Interval Analysis, Time Scale Calculus, Inventory Management Modeling.
+Dr. Asfand Fahad |Associate Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=508 | Details:Mathematical Analysis, Mathematical Inequalities and Applications, Graph Theory and Applications.
+Dr. Amjad Ali |Associate Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=504 | Details:Artificial Intelligence, Machine Learning, Deep Learning, Parallel Computing, Scientific Computing, Computational Fluid Dynamics.
+Dr. Muhammad Ibrahim |Assistant Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=505 | Details:Graph Theory, Numerical Analysis, Computer Networks, Cryptography, Security Networks, Topological Graph Theory.
+Dr. Shehzad Ahmed |Assistant Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=506 | Details:Computational Fluid Dynamics.
+Dr. Anam Rani |Assistant Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=922 | Details:Commutative Algebra, Combinatorial Commutative Algebra, Algebraic, Chemical & Complex Network Graph Theory, Mathematical Modelling, Graph Neural Networks (GNN) and applications in biology & chemistry, Cryptographic applications of algebra & graph theory.
+Dr. Athar Kharal |Assistant Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=182 | Details:Applied Data Science, Fuzzy Topologies, MCDM, Soft and Rough Sets and their Variants.
+Dr. Safia Mirza |Assistant Professor | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=507| Details:Differential/Partial Equations, Dynamic systems, Fluid Mechanics, Time scale theory.
+Dr. Muhammad Imran Khalid |Lecturer | Link: https://bzu.edu.pk/view_faculty.php?deptID=40&facultyID=953 | Details:Graph Theory, Computational Cryptography, Functional Analysis, Numerical analysis, Algabra
+</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Programmes Offered</label>
+                <textarea
+                    id="inp_programs">BS Mathematics, MPhil Applied Mathematics, PhD Pure Mathematics, Undergraduate Programs, BS(5th Semester) Program, Graduate (MS)Program, Graduate (PhD) Program, ADP Programs, Diploma Programs, BS AI, BS Data Science</textarea>
+            </div>
+            <div class="form-group">
+                <label>Courses (Detailed List)</label>
+                <textarea
+                    id="inp_courses">Machine Learning, Cryptography, Web Technology, Mathematical Modeling, Portfolio Theory and Risk Management, Business Intelligence, Data Analytics, Acturial Mathematics, Deep Learning, Time Series Analysis, Operation Research(Management Science), Measure Theory, Optimization Theory, Functional Analysis, Real Analysis, Stochastic Calculus, Numerical Analysis, Graph Theory, Linear Programming, Probability and Statistics, Programming with python, Object Oriented Programming, Design and Analysis of Algorithms, Calculus, Discrete Mathematics, Ordinary Differential Equations, Partial Differential Equations, Mapple, MATLAB, Foundation and applications of Generative AI, Fuzzy Set Theory, Game Theory, Classical Mechanics, Complex Analysis, Data Structure and Algorithms, Vector and Tensor Analysis, Group Theory, Toplogy and Metric Spaces</textarea>
+            </div>
+
+            <div class="form-group full-width">
+                <label>Upcoming Events (Full Details)</label>
+                <textarea id="inp_events">Annual Math Olympiad (Oct 2026) | Details: A competition for all university students. Venue: Main Hall.
+Qawali Night and Annual Function (Feb 11, 2026) | Details: To entertain students and polishing the hidden skills of the students through their talent in various fields.
+Sports Gala (Feb 9 & Feb 10, 2026) | Details: For extra curricular Activities of students including sports 
+1. Cricket 
+2. Football 
+3. Badminton 
+4. Table Tennis
+5. 100 Meter Race
+6. Tug Of War
+7. Ludo 
+8. 300 Meter Race</textarea>
+            </div>
+        </div>
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="resetData()">Reset Default</button>
+            <button class="btn btn-primary" onclick="generateCode()">Generate Config Code</button>
+        </div>
+        <div id="outputArea" class="output-box"></div>
+        <div id="copyHint" class="hint" style="display:none; margin-top:10px; text-align:center;">Copy the green code
+            above and paste it into 'index.html'</div>
+    </div>
+<script>
+        function generateCode() {
+            try {
+                // 1. Get Values (Ensuring all fields are captured)
+                const data = {
+                    mission: document.getElementById('inp_mission').value,
+                    about: document.getElementById('inp_about').value, // CRITICAL FIX
+                    goals: document.getElementById('inp_goals').value,
+                    roles: document.getElementById('inp_roles').value, // CRITICAL FIX
+                    faculty: document.getElementById('inp_faculty').value,
+                    programs: document.getElementById('inp_programs').value,
+                    courses: document.getElementById('inp_courses').value,
+                    events: document.getElementById('inp_events').value
+                };
+
+                // 2. Validate JSON structure before encoding
+                const jsonStr = JSON.stringify(data);
+                console.log("JSON Generated:", jsonStr); // Debug log
+
+                // 3. Encode safely (Handles special characters)
+                const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+
+                // 4. Display
+                const output = document.getElementById('outputArea');
+                if (output) {
+                    output.style.display = 'block';
+                    output.innerText = encoded;
+                    document.getElementById('copyHint').style.display = 'block';
+                    alert("SUCCESS: Code generated! Please copy the green text.");
+                } else {
+                    alert("ERROR: Could not find output area.");
+                }
+            } catch (error) {
+                alert("ERROR generating code: " + error.message + "\nCheck for special characters in text areas.");
+            }
+        }
+
+        function resetData() {
+            if (confirm("Reset all fields to default?")) {
+                location.reload();
+            }
+        }
+    </script>
+</body>
+
+</html>
