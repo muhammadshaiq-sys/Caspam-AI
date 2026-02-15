@@ -622,6 +622,26 @@
                 height: 40px;
             }
         }
+        .messages {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    display: flex !important;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 200px; /* Ensure it has height */
+}
+
+/* Make sure main chat area takes full height */
+.main-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.2);
+    min-height: 500px; /* Ensure minimum height */
+}
     </style>
 </head>
 <body>
@@ -1408,5 +1428,6 @@
 </script>
 </body>
 </html>
+
 
 
