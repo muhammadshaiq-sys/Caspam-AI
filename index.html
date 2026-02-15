@@ -728,11 +728,14 @@
                 content: msg.content
             }));
         }
-
-        function clearHistory() {
-            localStorage.removeItem(HISTORY_KEY);
-            location.reload();
-        }
+function clearHistory() {
+    if (confirm('Delete ALL chat history?')) {
+        localStorage.removeItem('caspam_sessions');
+        localStorage.removeItem(HISTORY_KEY);
+        chatSessions = { current: null, sessions: {} };
+        createNewSession();
+    }
+}
 
         /* ========================================
            3. ENHANCED MARKDOWN PARSER
@@ -755,14 +758,19 @@
            ======================================== */
 
         function renderMessage(text, type, save = true) {
-            const container = document.getElementById('chatContainer');
-            const div = document.createElement('div');
-            div.className = `msg ${type}`;
-            div.innerHTML = type === 'bot' ? parseMarkdown(text) : text.replace(/\n/g, '<br>');
-            container.appendChild(div);
-            scrollToBottom();
-            if (save) saveToHistory(type === 'bot' ? 'assistant' : 'user', text);
-        }
+    const container = document.getElementById('chatContainer');
+    const div = document.createElement('div');
+    div.className = `msg ${type}`;
+    div.innerHTML = type === 'bot' ? parseMarkdown(text) : text.replace(/\n/g, '<br>');
+    container.appendChild(div);
+    scrollToBottom();
+    
+    if (save) {
+        saveToHistory(type === 'bot' ? 'assistant' : 'user', text);
+        // ✅ ADD THIS LINE
+        saveMessageToSession(type === 'bot' ? 'assistant' : 'user', text);
+    }
+}
 
         function scrollToBottom() {
             const container = document.getElementById('chatContainer');
@@ -828,10 +836,8 @@ async function sendMessage() {
         }
 
         function resetChat() {
-            document.getElementById('chatContainer').innerHTML = '';
-            renderMessage("Chat session started. How can I help?", 'bot', false);
-        }
-
+    createNewSession();  // Replace the old content with this
+}
         function saveApiSettings() {
             const newKey = document.getElementById('apiKeyInput').value.trim();
             if (newKey) API_KEY = newKey;
@@ -841,11 +847,237 @@ async function sendMessage() {
         /* ========================================
            5. EVENTS & INIT
            ======================================== */
+/* ========================================
+   7. CHAT HISTORY SIDEBAR FUNCTIONS
+   ======================================== */
 
-        window.onload = () => {
-            loadChatHistory();
-            initParticles();
+// Chat sessions storage
+let chatSessions = {
+    current: null,
+    sessions: {}
+};
+
+// Load sessions from localStorage
+function loadSessions() {
+    const saved = localStorage.getItem('caspam_sessions');
+    if (saved) {
+        chatSessions = JSON.parse(saved);
+    } else {
+        // Create first session
+        createNewSession();
+    }
+    renderHistorySidebar();
+}
+
+// Create new chat session
+function createNewSession() {
+    const sessionId = 'session_' + Date.now();
+    
+    // Save current session first if it exists
+    if (chatSessions.current && chatSessions.sessions[chatSessions.current]) {
+        saveCurrentSession();
+    }
+    
+    chatSessions.current = sessionId;
+    chatSessions.sessions[sessionId] = {
+        id: sessionId,
+        title: 'New Chat',
+        preview: '',
+        messages: [],
+        date: new Date().toISOString()
+    };
+    
+    // Clear chat display
+    document.getElementById('chatContainer').innerHTML = '';
+    renderMessage("Chat session started. How can I help?", 'bot', false);
+    
+    saveSessions();
+    renderHistorySidebar();
+}
+
+// Save current session messages
+function saveCurrentSession() {
+    const sessionId = chatSessions.current;
+    if (!sessionId || !chatSessions.sessions[sessionId]) return;
+    
+    // Get all messages from chat container
+    const container = document.getElementById('chatContainer');
+    const messages = [];
+    
+    container.querySelectorAll('.msg').forEach(msgEl => {
+        const type = msgEl.classList.contains('user') ? 'user' : 'assistant';
+        const content = msgEl.innerText;
+        messages.push({ role: type, content });
+    });
+    
+    chatSessions.sessions[sessionId].messages = messages;
+    
+    // Update preview and title
+    const userMessages = messages.filter(m => m.role === 'user');
+    if (userMessages.length > 0) {
+        chatSessions.sessions[sessionId].preview = userMessages[0].content.substring(0, 50);
+        if (chatSessions.sessions[sessionId].title === 'New Chat') {
+            chatSessions.sessions[sessionId].title = userMessages[0].content.substring(0, 30);
+        }
+    }
+}
+
+// Save message to current session
+function saveMessageToSession(role, content) {
+    const sessionId = chatSessions.current;
+    if (!sessionId) return;
+    
+    if (!chatSessions.sessions[sessionId].messages) {
+        chatSessions.sessions[sessionId].messages = [];
+    }
+    
+    chatSessions.sessions[sessionId].messages.push({ role, content });
+    
+    // Update preview if this is first user message
+    if (role === 'user') {
+        chatSessions.sessions[sessionId].preview = content.substring(0, 50);
+        if (chatSessions.sessions[sessionId].title === 'New Chat') {
+            chatSessions.sessions[sessionId].title = content.substring(0, 30);
+        }
+    }
+    
+    saveSessions();
+    renderHistorySidebar();
+}
+
+// Load a specific session
+function loadSession(sessionId) {
+    // Save current session first
+    saveCurrentSession();
+    
+    const session = chatSessions.sessions[sessionId];
+    if (!session) return;
+    
+    chatSessions.current = sessionId;
+    
+    // Clear and load messages
+    const container = document.getElementById('chatContainer');
+    container.innerHTML = '';
+    
+    session.messages.forEach(msg => {
+        renderMessage(msg.content, msg.role === 'assistant' ? 'bot' : 'user', false);
+    });
+    
+    saveSessions();
+    renderHistorySidebar();
+}
+
+// Delete a session
+function deleteSession(sessionId, event) {
+    event.stopPropagation();
+    
+    if (confirm('Delete this chat?')) {
+        delete chatSessions.sessions[sessionId];
+        
+        if (chatSessions.current === sessionId) {
+            createNewSession();
+        }
+        
+        saveSessions();
+        renderHistorySidebar();
+    }
+}
+
+// Rename a session
+function renameSession(sessionId, event) {
+    event.stopPropagation();
+    const newTitle = prompt('Enter new chat name:');
+    if (newTitle) {
+        chatSessions.sessions[sessionId].title = newTitle;
+        saveSessions();
+        renderHistorySidebar();
+    }
+}
+
+// Save all sessions to localStorage
+function saveSessions() {
+    localStorage.setItem('caspam_sessions', JSON.stringify(chatSessions));
+}
+
+// Render history sidebar
+function renderHistorySidebar() {
+    const historyList = document.getElementById('historyList');
+    if (!historyList) return;
+    
+    let html = '';
+    
+    // Sort sessions by date (newest first)
+    const sortedSessions = Object.values(chatSessions.sessions)
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    sortedSessions.forEach(session => {
+        const isActive = session.id === chatSessions.current;
+        const date = new Date(session.date).toLocaleDateString();
+        
+        html += `
+            <div class="history-item ${isActive ? 'active' : ''}" onclick="loadSession('${session.id}')">
+                <div class="history-item-title">${session.title}</div>
+                <div class="history-item-preview">${session.preview || 'No messages'}</div>
+                <div class="history-item-date">${date}</div>
+                <div class="history-item-actions">
+                    <button onclick="renameSession('${session.id}', event)">✏️</button>
+                    <button onclick="deleteSession('${session.id}', event)">🗑️</button>
+                </div>
+            </div>
+        `;
+    });
+    
+    if (sortedSessions.length === 0) {
+        html = '<div style="text-align: center; color: #555; padding: 20px;">No chat history</div>';
+    }
+    
+    historyList.innerHTML = html;
+}
+
+// Export history
+function exportHistory() {
+    const dataStr = JSON.stringify(chatSessions, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const link = document.createElement('a');
+    link.setAttribute('href', dataUri);
+    link.setAttribute('download', `caspam-history-${new Date().toISOString().slice(0,10)}.json`);
+    link.click();
+}
+
+// Import history
+function importHistory() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = event => {
+            try {
+                const imported = JSON.parse(event.target.result);
+                chatSessions = imported;
+                saveSessions();
+                loadSession(chatSessions.current);
+                renderHistorySidebar();
+                alert('History imported successfully!');
+            } catch (error) {
+                alert('Invalid history file');
+            }
         };
+        
+        reader.readAsText(file);
+    };
+    
+    input.click();
+}
+       window.onload = () => {
+    loadSessions();  // Add this line FIRST
+    loadChatHistory();
+    initParticles();
+};
 
         document.getElementById('userInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendMessage();
@@ -929,3 +1161,4 @@ async function sendMessage() {
 
 
 </html>
+
