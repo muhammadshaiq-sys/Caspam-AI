@@ -1374,6 +1374,39 @@
         }
     });
 </script>
+    <script>
+    // Force chat container to show messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatContainer = document.getElementById('chatContainer');
+        
+        // Clear any existing content
+        chatContainer.innerHTML = '';
+        
+        // Add a welcome message if no messages exist
+        const saved = localStorage.getItem('caspam_chat_v5');
+        if (!saved) {
+            const welcomeMsg = document.createElement('div');
+            welcomeMsg.className = 'msg bot';
+            welcomeMsg.innerHTML = "Hello! I'm CASPAM AI. I have full access to Department info. How can I help?";
+            chatContainer.appendChild(welcomeMsg);
+        } else {
+            // Load saved messages
+            const history = JSON.parse(saved);
+            history.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `msg ${msg.role === 'assistant' ? 'bot' : 'user'}`;
+                div.innerHTML = msg.role === 'assistant' ? parseMarkdown(msg.content) : msg.content.replace(/\n/g, '<br>');
+                chatContainer.appendChild(div);
+            });
+        }
+        
+        // Make sure chat container is visible
+        chatContainer.style.display = 'flex';
+        chatContainer.style.flexDirection = 'column';
+        chatContainer.style.overflowY = 'auto';
+    });
+</script>
 </body>
 </html>
+
 
