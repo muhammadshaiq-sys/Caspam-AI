@@ -638,11 +638,183 @@
         padding: 12px 15px;
     }
 }
+        /* ========== MOBILE MENU STYLES ========== */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mobile-menu-btn .bar {
+    width: 25px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    backdrop-filter: blur(3px);
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 768px) {
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -300px;
+        top: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        padding-top: 70px;
+        background: rgba(10, 10, 20, 0.95);
+    }
+    
+    .history-sidebar {
+        position: fixed;
+        right: -300px;
+        top: 0;
+        bottom: 0;
+        width: 280px;
+        z-index: 1000;
+        transition: right 0.3s ease;
+        padding-top: 70px;
+        background: rgba(10, 10, 20, 0.95);
+    }
+    
+    .sidebar.mobile-open {
+        left: 0;
+    }
+    
+    .history-sidebar.mobile-open {
+        right: 0;
+    }
+    
+    .mobile-overlay.active {
+        display: block;
+    }
+    
+    .app-container {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+    
+    .main-chat {
+        width: 100%;
+    }
+    
+    .header {
+        padding: 15px;
+        padding-left: 70px;
+    }
+    
+    .header div {
+        font-size: 0.9rem;
+    }
+    
+    .messages {
+        padding: 15px;
+    }
+    
+    .msg {
+        max-width: 90%;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .input-area {
+        padding: 10px 15px;
+    }
+    
+    .input-area input {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .send-btn {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .brand {
+        margin-bottom: 20px;
+    }
+    
+    .nav-btn {
+        margin: 5px 15px;
+    }
+    
+    .sidebar-footer {
+        margin: 20px 15px;
+    }
+    
+    .history-item-actions {
+        opacity: 1;
+    }
+}
+
+/* Small phones */
+@media screen and (max-width: 480px) {
+    .sidebar, .history-sidebar {
+        width: 250px;
+    }
+    
+    .header {
+        padding-left: 65px;
+    }
+    
+    .header div {
+        font-size: 0.85rem;
+    }
+    
+    .msg {
+        max-width: 95%;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+    
+    .status-dot {
+        width: 6px;
+        height: 6px;
+    }
+}
     </style>
 </head>
 
 <body>
+<!-- Mobile Menu Button -->
+<div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+</div>
 
+<!-- Mobile Menu Overlay -->
+<div class="mobile-overlay" onclick="closeMobileMenu()"></div>
     <canvas id="bgCanvas"></canvas>
 
     <div class="app-container">
@@ -1258,11 +1430,47 @@ function importHistory() {
             init();
             animate();
         }
+        /* ========================================
+   8. MOBILE MENU FUNCTIONS
+   ======================================== */
+
+function toggleMobileMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const historySidebar = document.querySelector('.history-sidebar');
+    const overlay = document.querySelector('.mobile-overlay');
+    
+    sidebar.classList.toggle('mobile-open');
+    historySidebar.classList.toggle('mobile-open');
+    overlay.classList.toggle('active');
+}
+
+function closeMobileMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const historySidebar = document.querySelector('.history-sidebar');
+    const overlay = document.querySelector('.mobile-overlay');
+    
+    sidebar.classList.remove('mobile-open');
+    historySidebar.classList.remove('mobile-open');
+    overlay.classList.remove('active');
+}
+
+// Close menu when clicking on a nav button (optional)
+document.addEventListener('DOMContentLoaded', function() {
+    const navButtons = document.querySelectorAll('.nav-btn, .history-item');
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                closeMobileMenu();
+            }
+        });
+    });
+});
     </script>
 </body>
 
 
 </html>
+
 
 
 
