@@ -1333,30 +1333,11 @@
     }, 2000);
 </script>
 <body>
-    <script>
-        // TEST SCRIPT
-        console.log("Page loaded");
-        setTimeout(function() {
-            const chat = document.getElementById('chatContainer');
-            if (chat) {
-                const testMsg = document.createElement('div');
-                testMsg.className = 'msg bot';
-                testMsg.style.backgroundColor = 'red';
-                testMsg.style.padding = '20px';
-                testMsg.style.margin = '10px';
-                testMsg.style.color = 'white';
-                testMsg.style.fontSize = '20px';
-                testMsg.innerHTML = '🔴 TEST: If you can see this, chat works!';
-                chat.appendChild(testMsg);
-            } else {
-                alert('Chat container not found!');
-            }
-        }, 3000);
-    </script>
-    
+   
     <canvas id="bgCanvas"></canvas>
     <!-- rest of your code -->
 </html>
+
 
 
 
