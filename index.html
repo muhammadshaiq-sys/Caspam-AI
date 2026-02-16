@@ -622,17 +622,7 @@
                 height: 40px;
             }
         }
-        .messages {
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
-    display: flex !important;
-    flex-direction: column;
-    gap: 20px;
-    min-height: 200px; /* Ensure it has height */
-}
-
-/* Make sure main chat area takes full height */
+  
 .main-chat {
     flex: 1;
     display: flex;
@@ -641,26 +631,6 @@
     overflow: hidden;
     background: rgba(0, 0, 0, 0.2);
     min-height: 500px; /* Ensure minimum height */
-}
-        /* FORCE FIX - ADD THIS AT THE END OF YOUR STYLE TAG */
-.messages {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-    padding: 30px !important;
-    height: calc(100vh - 140px) !important;
-    overflow-y: auto !important;
-    background: rgba(0, 0, 0, 0.3) !important;
-}
-
-.msg {
-    display: block !important;
-    max-width: 85% !important;
-    padding: 16px 22px !important;
-    border-radius: 18px !important;
-    line-height: 1.6 !important;
-    font-size: 0.95rem !important;
-    word-wrap: break-word !important;
 }
 
 .msg.bot {
@@ -1508,6 +1478,7 @@
 </script>
 </body>
 </html>
+
 
 
 
