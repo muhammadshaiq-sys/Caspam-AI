@@ -500,6 +500,32 @@
                 padding: 10px 15px;
             }
         }
+       /* FORCE INPUT AREA TO SHOW */
+.input-area {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    z-index: 100 !important;
+    background: rgba(5, 5, 16, 0.95) !important;
+    padding: 15px 30px !important;
+}
+
+.input-area input {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    flex: 1 !important;
+}
+
+.send-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
     </style>
 </head>
 <body>
@@ -1316,6 +1342,7 @@
     <canvas id="bgCanvas"></canvas>
     <!-- rest of your code -->
 </html>
+
 
 
 
