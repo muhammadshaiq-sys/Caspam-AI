@@ -1477,7 +1477,53 @@
 })();
 </script>
 </body>
+    <script>
+    // TEST - Run immediately
+    console.log("Testing chat display...");
+    setTimeout(function() {
+        const chat = document.getElementById('chatContainer');
+        console.log("Chat container found:", chat);
+        if (chat) {
+            console.log("Chat children count:", chat.children.length);
+            console.log("Chat HTML:", chat.innerHTML);
+            
+            // Force add a red message to see if it appears
+            const testMsg = document.createElement('div');
+            testMsg.className = 'msg bot';
+            testMsg.style.backgroundColor = 'red';
+            testMsg.style.color = 'white';
+            testMsg.style.padding = '20px';
+            testMsg.innerHTML = 'TEST MESSAGE - CAN YOU SEE THIS?';
+            chat.appendChild(testMsg);
+        }
+    }, 2000);
+</script>
+<body>
+    <script>
+        // TEST SCRIPT
+        console.log("Page loaded");
+        setTimeout(function() {
+            const chat = document.getElementById('chatContainer');
+            if (chat) {
+                const testMsg = document.createElement('div');
+                testMsg.className = 'msg bot';
+                testMsg.style.backgroundColor = 'red';
+                testMsg.style.padding = '20px';
+                testMsg.style.margin = '10px';
+                testMsg.style.color = 'white';
+                testMsg.style.fontSize = '20px';
+                testMsg.innerHTML = '🔴 TEST: If you can see this, chat works!';
+                chat.appendChild(testMsg);
+            } else {
+                alert('Chat container not found!');
+            }
+        }, 3000);
+    </script>
+    
+    <canvas id="bgCanvas"></canvas>
+    <!-- rest of your code -->
 </html>
+
 
 
 
