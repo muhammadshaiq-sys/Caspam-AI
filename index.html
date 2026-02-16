@@ -376,13 +376,15 @@
         }
 
         .messages {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #0a0a0f;
+    min-height: 200px;
+}
 
         .messages::-webkit-scrollbar {
             width: 6px;
@@ -394,29 +396,21 @@
         }
 
         .msg {
-            max-width: 85%;
-            padding: 16px 22px;
-            border-radius: 18px;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            word-wrap: break-word;
-        }
+    padding: 12px 18px;
+    border-radius: 10px;
+    max-width: 80%;
+    color: white;
+}
 
-        .msg.user {
-            background: var(--msg-user-bg);
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-            box-shadow: 0 5px 20px rgba(112, 0, 255, 0.3);
-        }
+.msg.bot {
+    background: #1e1e2e;
+    align-self: flex-start;
+}
 
-        .msg.bot {
-            background: var(--msg-bot-bg);
-            color: var(--text-main);
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border: 1px solid var(--glass-border);
-        }
+.msg.user {
+    background: #0078ff;
+    align-self: flex-end;
+}
 
         .input-area {
             padding: 20px 30px;
@@ -1531,6 +1525,7 @@
     <canvas id="bgCanvas"></canvas>
     <!-- rest of your code -->
 </html>
+
 
 
 
