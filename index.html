@@ -1311,32 +1311,12 @@
 })();
 </script>
 </body>
-    <script>
-    // TEST - Run immediately
-    console.log("Testing chat display...");
-    setTimeout(function() {
-        const chat = document.getElementById('chatContainer');
-        console.log("Chat container found:", chat);
-        if (chat) {
-            console.log("Chat children count:", chat.children.length);
-            console.log("Chat HTML:", chat.innerHTML);
-            
-            // Force add a red message to see if it appears
-            const testMsg = document.createElement('div');
-            testMsg.className = 'msg bot';
-            testMsg.style.backgroundColor = 'red';
-            testMsg.style.color = 'white';
-            testMsg.style.padding = '20px';
-            testMsg.innerHTML = 'TEST MESSAGE - CAN YOU SEE THIS?';
-            chat.appendChild(testMsg);
-        }
-    }, 2000);
-</script>
-<body>
+
    
     <canvas id="bgCanvas"></canvas>
     <!-- rest of your code -->
 </html>
+
 
 
 
