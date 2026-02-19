@@ -822,52 +822,28 @@ async function sendMessage() {
     const loadingId = showLoading();
 
     try {
+        // For old model on Vercel
         const response = await fetch('/api/chat', {
             method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                message: text,
-                sessionId: localStorage.getItem('sessionId') || 'session_' + Date.now()
+                messages: [
+                    { role: "system", content: getContext() },
+                    { role: "user", content: text }
+                ]
             })
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         const data = await response.json();
         removeLoading(loadingId);
         
-        // Handle different response formats
-        let replyText = '';
-        
-        if (data.reply) {
-            // New format: { reply: "..." }
-            replyText = data.reply;
-        } 
-        else if (data.choices && data.choices[0] && data.choices[0].message) {
-            // Old Groq format: { choices: [{ message: { content: "..." } }] }
-            replyText = data.choices[0].message.content;
-        }
-        else if (data.choices && data.choices[0] && data.choices[0].text) {
-            // Another old format
-            replyText = data.choices[0].text;
-        }
-        else {
-            // Unknown format
-            console.log('Unknown response format:', data);
-            replyText = 'Received response but format unknown';
-        }
-        
-        renderMessage(replyText || 'No response', 'bot');
+        // Old model returns data.choices[0].message.content
+        const reply = data.choices?.[0]?.message?.content || 'No response';
+        renderMessage(reply, 'bot');
 
     } catch (error) {
         removeLoading(loadingId);
         renderMessage('❌ Error: ' + error.message, 'error');
-        console.error('Error:', error);
     }
 }
 
@@ -1365,6 +1341,7 @@ async function sendMessage() {
     <canvas id="bgCanvas"></canvas>
     <!-- rest of your code -->
 </html>
+
 
 
 
